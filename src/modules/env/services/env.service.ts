@@ -55,7 +55,6 @@ export class EnvService extends implementOptionalInterface<Partial<Readonly<IDot
       NODE_ENV: envalid.str(),
       API_BASE_PATH: envalid.str({ default: 'prod', devDefault: 'dev' }),
       PORT: envalid.port({ default: 3000 }),
-      API_DEFAULT_STRATEGY: envalid.str({ default: 'jwt' }),
       SWAGGER_DESCRIPTION: envalid.str({ default: 'Base API' }),
       SWAGGER_TAG: envalid.str({ default: 'Base' }),
       SWAGGER_TITLE: envalid.str({ default: 'Base' }),

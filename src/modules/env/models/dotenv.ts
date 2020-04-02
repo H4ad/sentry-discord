@@ -15,11 +15,6 @@ export interface IDotEnv {
   //#region API
 
   /**
-   * A estratégia padrão de autenticação
-   */
-  API_DEFAULT_STRATEGY: string;
-
-  /**
    * O url base para acessar a API.
    * Eu recomendo usar subdominios, e manter o base como ''.
    */
