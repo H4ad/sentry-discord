@@ -62,6 +62,7 @@ export class EnvService extends implementOptionalInterface<Partial<Readonly<IDot
       SWAGGER_VERSION: envalid.str({ default: '1.0' }),
       SWAGGER_ENABLED: envalid.bool({ default: false }),
       DISCORD_WEBHOOK_URL: envalid.url({ default: 'http://127.0.0.1' }),
+      DISCORD_SENTRY_BOT_IMAGE: envalid.url({ default: 'https://i.imgur.com/xJ0dMBZ.jpg' }),
       API_KEY: envalid.str({ default: '' }),
     };
 

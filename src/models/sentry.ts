@@ -1,130 +1,111 @@
 export interface SentryPayload {
-  action: 'triggered' | 'error';
-  actor: Actor;
-  data: SentryPayloadData;
-  installation: Installation;
-}
-
-export interface Actor {
+  project_name: string;
+  message: string;
   id: string;
-  name: string;
-  type: string;
-}
-
-export interface SentryPayloadData {
-  error: Error;
+  culprit: string;
+  project_slug: string;
+  url: string;
+  level: string;
+  triggering_rules: any[];
   event: Event;
-  triggered_rule: string;
+  project: string;
+  logger: null;
 }
 
 export interface Event {
-  _ref: number;
+  stacktrace: Stacktrace;
+  extra: Extra;
+  modules: Modules;
   _ref_version: number;
-  contexts: Contexts;
+  _ref: number;
+  id: string;
+  _metrics: Metrics;
   culprit: string;
-  datetime: Date;
-  dist: null;
-  event_id: string;
-  exception: Exception;
-  fingerprint: string[];
-  grouping_config: GroupingConfig;
-  hashes: string[];
-  issue_url: string;
-  key_id: string;
-  level: string;
-  location: string;
-  logger: string;
-  message: string;
-  metadata: Metadata;
-  platform: string;
-  project: number;
-  received: number;
-  release: null;
-  request: Request;
-  sdk: SDK;
-  tags: Array<string[]>;
-  time_spent: null;
-  timestamp: number;
   title: string;
-  type: string;
-  url: string;
-  user: User;
+  event_id: string;
+  environment: string;
+  platform: string;
   version: string;
-  web_url: string;
+  location: null;
+  logger: string;
+  type: string;
+  metadata: Metadata;
+  tags: Array<string[]>;
+  timestamp: number;
+  user: User;
+  fingerprint: string[];
+  hashes: string[];
+  received: number;
+  level: string;
+  contexts: Contexts;
+  request: Request;
+  logentry: Logentry;
 }
 
-export interface Error {
-  _ref: number;
-  _ref_version: number;
-  contexts: Contexts;
-  culprit: string;
-  datetime: Date;
-  dist: null;
-  event_id: string;
-  exception: Exception;
-  fingerprint: string[];
-  grouping_config: GroupingConfig;
-  hashes: string[];
-  issue_url: string;
-  key_id: string;
-  level: string;
-  location: string;
-  logger: string;
-  message: string;
-  metadata: Metadata;
-  platform: string;
-  project: number;
-  received: number;
-  release: null;
-  request: Request;
-  sdk: SDK;
-  tags: Array<string[]>;
-  time_spent: null;
-  timestamp: number;
-  title: string;
-  type: string;
-  url: string;
-  user: User;
-  version: string;
-  web_url: string;
+export interface Metrics {
+  'bytes.stored.event': number;
 }
 
 export interface Contexts {
+  client_os: Browser;
   browser: Browser;
-  os: Browser;
 }
 
 export interface Browser {
-  name: string;
-  type: string;
   version: string;
-}
-
-export interface Exception {
-  values: Value[];
-}
-
-export interface Value {
-  mechanism: Mechanism;
-  stacktrace: Stacktrace;
   type: string;
-  value: string;
-}
-
-export interface Mechanism {
-  data: MechanismData;
-  description: null;
-  handled: boolean;
-  help_link: null;
-  meta: null;
-  synthetic: null;
-  type: string;
-}
-
-export interface MechanismData {
-  message: string;
-  mode: string;
   name: string;
+}
+
+export interface Extra {
+  emptyList: any[];
+  unauthorized: boolean;
+  emptyMap: EmptyMap;
+  url: string;
+  results: number[];
+  length: number;
+  session: Session;
+}
+
+export interface EmptyMap {
+}
+
+export interface Session {
+  foo: string;
+}
+
+export interface Logentry {
+  message: null;
+  params: null;
+  formatted: string;
+}
+
+export interface Metadata {
+  title: string;
+}
+
+export interface Modules {
+  'my.package': string;
+}
+
+export interface Request {
+  cookies: Array<string[]>;
+  url: string;
+  headers: Array<string[]>;
+  env: Env;
+  fragment: null;
+  query_string: Array<string[]>;
+  data: Data;
+  method: string;
+  inferred_content_type: string;
+}
+
+export interface Data {
+  hello: string;
+}
+
+export interface Env {
+  ENV: string;
 }
 
 export interface Stacktrace {
@@ -132,73 +113,104 @@ export interface Stacktrace {
 }
 
 export interface Frame {
-  abs_path: string;
-  colno: number;
-  context_line: string;
-  data: FrameData;
-  errors: null;
-  filename: string;
-  function: null;
-  image_addr: null;
-  in_app: boolean;
-  instruction_addr: null;
-  lineno: number;
-  module: string;
-  package: null;
-  platform: null;
-  post_context: string[];
-  pre_context: string[];
-  raw_function: null;
-  symbol: null;
+  function: string;
   symbol_addr: null;
-  trust: null;
-  vars: null;
-}
-
-export interface FrameData {
-  orig_in_app: number;
-}
-
-export interface GroupingConfig {
-  enhancements: string;
-  id: string;
-}
-
-export interface Metadata {
+  abs_path: string;
+  errors: null;
+  pre_context: string[];
+  post_context: string[] | null;
+  vars: Vars;
+  package: null;
+  instruction_addr: null;
+  symbol: null;
+  image_addr: null;
+  module: string;
   filename: string;
-  type: string;
-  value: string;
+  platform: null;
+  lineno: number;
+  colno: null;
+  trust: null;
+  in_app: boolean;
+  data: EmptyMap;
+  context_line: string;
+  raw_function: null;
 }
 
-export interface Request {
-  cookies: null;
-  data: null;
-  env: null;
-  fragment: null;
-  headers: Array<string[]>;
-  inferred_content_type: null;
-  method: null;
-  query_string: any[];
-  url: string;
+export interface Vars {
+  '\'frames\''?: string;
+  '\'culprit\''?: null;
+  '\'event_type\''?: string;
+  '\'date\''?: null | string;
+  '\'extra\''?: VarsExtra;
+  '\'v\''?: V;
+  '\'kwargs\''?: Kwargs;
+  '\'event_id\''?: string;
+  '\'tags\''?: null;
+  '\'data\''?: Result | null;
+  '\'self\''?: string;
+  '\'time_spent\''?: null;
+  '\'result\''?: Result;
+  '\'stack\''?: boolean;
+  '\'handler\''?: string;
+  '\'k\''?: string;
+  '\'public_key\''?: null;
+  '\'message\''?: string;
+  '\'client\''?: string;
+  '\'options\''?: Options;
+  '\'root\''?: string;
+  '\'parser\''?: string;
+  '\'dsn\''?: string;
+  '\'opts\''?: string;
+  '\'args\''?: string[];
 }
 
-export interface SDK {
-  integrations: string[];
-  name: string;
-  packages: Package[];
-  version: string;
+export interface Result {
+  '\'sentry.interfaces.Message\'': V;
+  '\'message\'': string;
 }
 
-export interface Package {
-  name: string;
-  version: string;
+export interface V {
+  '\'message\'': string;
+  '\'params\'': any[];
+}
+
+export interface VarsExtra {
+  '\'go_deeper\'': Array<string[]>;
+  '\'user\'': string;
+  '\'loadavg\'': number[];
+}
+
+export interface Kwargs {
+  '\'message\''?: string;
+  '\'level\'': number;
+  '\'extra\''?: KwargsExtra;
+  '\'tags\''?: null;
+  '\'data\''?: null;
+  '\'stack\''?: boolean;
+}
+
+export interface KwargsExtra {
+  '\'go_deeper\'': string[];
+  '\'user\'': string;
+  '\'loadavg\'': number[];
+}
+
+export interface Options {
+  '\'tags\'': null;
+  '\'data\'': null;
 }
 
 export interface User {
+  username: string;
+  name: string;
   ip_address: string;
+  email: string;
+  geo: Geo;
+  id: string;
 }
 
-export interface Installation {
-  uuid: string;
+export interface Geo {
+  city: string;
+  region: string;
+  country_code: string;
 }
-

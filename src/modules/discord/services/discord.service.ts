@@ -2,6 +2,7 @@
 
 import { HttpService, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 
+import { DiscordPayload } from '../../../models/discord';
 import { SentryPayload } from '../../../models/sentry';
 import { EnvService } from '../../env/services/env.service';
 
@@ -44,10 +45,70 @@ export class DiscordService {
    */
   public async alert(apiKey: string, sentryPayload: SentryPayload): Promise<void> {
     if (this.env.API_KEY !== apiKey)
-      throw new UnauthorizedException('A chave de API enviada é invalida.');
+      throw new UnauthorizedException('The API Key received is invalid.');
 
-    this.logger.log(sentryPayload);
-    this.logger.log(JSON.stringify(sentryPayload, null, 2));
+    const payload = this.getDiscordPayloadFromSentryPayload(sentryPayload);
+
+    await this.http.post(this.env.DISCORD_WEBHOOK_URL, payload)
+      .toPromise()
+      .then(() => ({ error: false }))
+      .catch(exception => {
+        this.logger.error(exception);
+
+        return { error: true };
+      });
+  }
+
+  //#endregion
+
+  //#region Private Methods
+
+  /**
+   * Método que retorna o payload que será enviado para o Discord
+   *
+   * @param sentryPayload As informações de payload do Sentry
+   */
+  private getDiscordPayloadFromSentryPayload(sentryPayload: SentryPayload): DiscordPayload {
+    return {
+      username: 'SentryBot',
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      avatar_url: this.env.DISCORD_SENTRY_BOT_IMAGE,
+      content: `Alert! New issue for ${ sentryPayload.project_name }.`,
+      embeds: [
+        {
+          author: {
+            name: sentryPayload?.event?.user?.name || 'Anonymous',
+            url: sentryPayload.url,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            icon_url: this.env.DISCORD_SENTRY_BOT_IMAGE,
+          },
+          title: sentryPayload.message,
+          url: sentryPayload.url,
+          description: sentryPayload.culprit,
+          color: 15258703,
+          fields: [
+            {
+              name: 'Level',
+              value: sentryPayload.level,
+              inline: true,
+            },
+            {
+              name: 'Environment',
+              value: sentryPayload.event?.environment || 'unknown',
+              inline: true,
+            },
+          ],
+          thumbnail: {
+            url: this.env.DISCORD_SENTRY_BOT_IMAGE,
+          },
+          footer: {
+            text: `Event received on: ${ new Date(sentryPayload.event.timestamp * 1000).toISOString() }.`,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            icon_url: this.env.DISCORD_SENTRY_BOT_IMAGE,
+          },
+        },
+      ],
+    };
   }
 
   //#endregion

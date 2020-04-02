@@ -69,6 +69,11 @@ export interface IDotEnv {
    */
   DISCORD_WEBHOOK_URL: string;
 
+  /**
+   * O url da imagem do bot
+   */
+  DISCORD_SENTRY_BOT_IMAGE: string;
+
   //#endregion
 
   //#region API Key
