@@ -1,6 +1,6 @@
 //#region Imports
 
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, HttpCode, HttpStatus, Post, Query, UnauthorizedException, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, HttpCode, HttpStatus, Post, Query, UnauthorizedException } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiNoContentResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 import { SentryPayload } from '../../../models/sentry';
@@ -11,7 +11,6 @@ import { DiscordService } from '../services/discord.service';
 /**
  * A classe que representa o construtor que lida com o Discord
  */
-@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('discord')
 @Controller('discord')
 export class DiscordController {
